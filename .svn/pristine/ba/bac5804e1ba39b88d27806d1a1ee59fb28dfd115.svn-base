@@ -1,0 +1,20 @@
+<template>
+    <div>
+        <div class="item" @click="$router.push('/joinAct')">
+            <img src="../../assets/img/act_1.png" alt="">
+        </div>
+        
+    </div>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style lang="less" scoped>
+.item{
+    background: #fff;
+}
+</style>

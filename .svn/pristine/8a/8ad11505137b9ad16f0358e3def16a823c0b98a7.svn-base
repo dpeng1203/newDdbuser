@@ -1,0 +1,84 @@
+<template>
+    <div>
+        <img src="../../assets/img/act.jpg" alt="">
+    </div>
+</template>
+
+<script>
+import wx from 'weixin-js-sdk';
+import {Toast} from 'vant'
+export default {
+    data() {
+        return{
+
+        }
+    },
+    methods: {
+        wxRegister () {
+            let url = window.location.href.split('#')[0]
+            this.$api.wx.sign({url}).then(res => {
+                if(res.resultCode == 1) {
+                    wx.config({
+                        debug: false,
+                        appId: res.data.appId,
+                        timestamp: res.data.timestamp,
+                        nonceStr: res.data.noncestr,
+                        signature: res.data.signature,
+                        jsApiList: [
+                            // 'onMenuShareTimeline',
+                            // 'onMenuShareAppMessage',
+                            'updateAppMessageShareData'
+                        ]
+                    });
+                    wx.ready( () => {
+                        wx.updateAppMessageShareData({
+                            title: '【DODO养生仪】您的好友赠送您两张体验券',                                                            // 分享标题
+                            link: 'http://xry.dodohz.com/ddbxryuser/index.html?#/getTicket?memCode=' + localStorage.memId,             // 分享链接
+                            desc: '“DODO智能养生仪”黑科技，追循古法，智慧养生！',                                                       // 分享描述
+                            imgUrl: require('../../assets/img/shareLogo.jpg'),                                                           // 分享图
+                            success () {
+                                // Toast('分享成功！')
+                            },
+                            cancel () {
+                                // opstion.error()
+                            }
+                        });
+                        // wx.onMenuShareAppMessage({
+                        //     title: '【DODO养生仪】您的好友赠送您两张体验券',                                                            // 分享标题
+                        //     link: 'http://xry.dodohz.com/ddbxryuser/index.html#/getTicket?memCode=' + localStorage.memId,             // 分享链接
+                        //     desc: '“DODO智能养生仪”黑科技，追循古法，智慧养生！',                                                       // 分享描述
+                        //     imgUrl: require('../../assets/img/shareLogo.jpg'),                                                           // 分享图
+                        //     success () {
+                        //         Toast('分享成功！')
+                        //     },
+                        //     cancel () {
+                        //         // opstion.error()
+                        //     }
+                        // });
+                        // wx.onMenuShareTimeline({
+                        //     title: '【DODO养生仪】您的好友赠送您两张体验券',                                                             // 分享标题
+                        //     link: 'http://xry.dodohz.com/ddbxryuser/index.html#/getTicket?memCode=' + localStorage.memId,             // 分享链接
+                        //     desc: '“DODO智能养生仪”黑科技，追循古法，智慧养生！',                                                         // 分享描述
+                        //     imgUrl: require('../../assets/img/shareLogo.jpg'),                                                           // 分享图
+                        //     success () {
+                        //         Toast('分享成功！')
+                        //     },
+                        //     cancel () {
+                        //         // opstion.error()
+                        //     }
+                        // })
+                    });
+                }
+            })
+        },
+    },
+    mounted() {
+        Toast('活动已结束！')
+        this.wxRegister() 
+    }
+}
+</script>
+
+<style>
+
+</style>

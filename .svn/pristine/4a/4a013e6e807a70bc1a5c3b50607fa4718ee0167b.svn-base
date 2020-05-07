@@ -1,0 +1,35 @@
+<template>
+    <div class="get">
+        <img src="../../assets/img/get.jpg" alt="">
+        <div class="btn" @click="getTicket"></div>
+    </div>
+</template>
+
+<script>
+export default {
+    data() {
+        return{
+
+        }
+    },
+    methods: {
+        getTicket() {
+            console.log(1111111111)
+        }
+    }
+}
+</script>
+
+<style lang="less" scoped>
+@s: 0.0133rem;
+.get{
+    position: relative;
+    .btn{
+        height: 300*@s;
+        position: absolute;
+        top: 800*@s;
+        left: 0;
+        right: 0;
+    }
+}
+</style>

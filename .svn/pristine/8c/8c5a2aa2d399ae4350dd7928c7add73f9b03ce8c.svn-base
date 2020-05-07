@@ -1,0 +1,126 @@
+<template>
+    <div class="login">
+        <div class="tab">
+            <span :class="{active: active == 1}" @click="active = 1">登录</span>
+            <span :class="{active: active == 2}" @click="active = 2">注册</span>
+        </div>
+        <div class="login-cont" v-if="active == 1">
+            <div class="item">
+                <input type="number" pattern="[0-9]*" placeholder="请输入手机号" v-model="phone">
+            </div>
+            <div class="item">
+                <input type="password" placeholder="请输入密码" v-model="password" >
+            </div>
+            <div class="btn" @click="login">立即登陆</div>
+            <p @click="$router.push('/resetPw')">忘记密码？</p>
+        </div>
+        <div class="login-cont" v-if="active == 2">
+            <sign @memLogin='signed'></sign>
+        </div>
+    </div>
+</template>
+
+<script>
+import { checkPhone,checkPassWord,checkCode,timeCountdown } from '../../utils'
+import { Toast, Search } from 'vant'
+import sign from './sign.vue'
+export default {
+    name: 'login',
+    components: {
+        sign
+    },
+    data() {
+        return{
+            active: 1,
+            phone: '',
+            password: '',
+            code: ''
+        }
+    },
+    methods: {
+        login() {
+            if(checkPhone(this.phone) && checkPassWord(this.password)) {
+                let data = {
+                    mobile: this.phone,
+                    pwd: this.password
+                }
+                this.$api.login.login(data).then( res => {
+                    if(res.resultCode === 1) {
+                        localStorage.memToken = res.data.token
+                        localStorage.phone = this.phone
+                        localStorage.memId = res.data.member.memCode
+                        this.$router.push('/home')
+                    }
+                })
+            }
+        },
+        signed() {
+            this.active = 1
+        }
+    },
+    mounted() {
+        if(localStorage.memToken) {
+            this.$router.push('/home')
+        }
+    }
+
+}
+</script>
+
+<style scoped lang="less">
+@s: 0.0133rem;
+.login{
+    min-height: calc(100vh);
+    background: #fff;
+    box-sizing: border-box;
+    .tab{
+        font-size: 36*@s;
+        font-family: 'STXihei';
+        font-weight: bold;
+        padding-top: 138*@s;
+        text-align: center;
+        span{
+            color: #C9C9C9;
+            display: inline-block;
+            line-height: 1;
+            padding-bottom: 30*@s;
+            border-bottom: 1px solid #C9C9C9;
+            width: 225*@s;
+        }
+        .active{
+            color: #00b616;
+            border-bottom: 1px solid #00b616;
+        }
+    }
+    .login-cont{
+        padding: 0 75*@s 80*@s;
+        text-align: center;
+        box-sizing: border-box;
+        margin-top: 100*@s;
+        .item{
+            border-bottom: 1px solid #E6E6E6;
+            padding: 20*@s 10*@s; 
+            padding-top: 70*@s;
+            font-size: 32*@s;
+            input{
+                width: 100%;
+            }
+        }
+        .btn{
+            font-size: 30*@s;
+            margin-top: 140*@s;
+            display: inline-block;
+            width: 600*@s;
+            line-height: 94*@s;
+            border-radius: 47*@s;
+            background: #00b616;
+            color: #fff;
+        }
+        p{
+            font-size: 30*@s;
+            text-align: right;
+            margin-top: 20*@s;
+        }
+    }
+}
+</style>

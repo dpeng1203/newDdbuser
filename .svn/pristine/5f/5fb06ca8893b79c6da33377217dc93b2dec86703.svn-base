@@ -1,0 +1,180 @@
+<template>
+	<div class="home">
+		<div class="head">
+			<img src="../assets/img/logo.jpg" alt="" class="head-img">
+			<div class="info">
+				<p class="phone">{{phone}}</p>
+				<p class="id">ID：{{memId}}</p>
+			</div>
+			<img src="../assets/img/enjoy.png" alt="" class="enjoy">
+		</div>
+		<div class="cont">
+			<div class="item" @click="toCash">
+				<img src="../assets/img/cash.png" alt="">
+				<span>我的余额</span>
+				<div class="num">{{cash}}</div>
+				<img src="../assets/img/right.png" alt="">
+			</div>
+			<div class="item" @click="$router.push('/recharge')">
+				<img src="../assets/img/myInfo.png" alt="">
+				<span>充值</span>
+				<img src="../assets/img/right.png" alt="">
+			</div>
+			<div class="item" @click="$router.push('/ticket')">
+				<img src="../assets/img/ticket.png" alt="">
+				<span>活动体验券</span>
+				<img src="../assets/img/right.png" alt="">
+			</div>
+			<div class="item" @click="$router.push('/lock')">
+				<img src="../assets/img/payPw.png" alt="" class="pw">
+				<span>设置/修改支付密码</span>
+				<img src="../assets/img/right.png" alt="">
+			</div>
+			<div class="item" @click="$router.push('/qr')">
+				<img src="../assets/img/erweima.png" alt="" class="pw">
+				<span>推荐好友</span>
+				<img src="../assets/img/right.png" alt="">
+			</div>
+			<div class="item" @click="$router.push('/friendList')">
+				<img src="../assets/img/recommend-icon.png" alt="" class="pw">
+				<span>好友列表</span>
+				<img src="../assets/img/right.png" alt="">
+			</div>
+			<!-- <div class="item" @click="$router.push('/joinAct')">
+				<img src="../assets/img/jionAct.png" alt="" class="pw">
+				<span>参与活动</span>
+				<img src="../assets/img/right.png" alt="">
+			</div> -->
+		</div>
+		<div class="foot" @click="out">退出</div>
+	</div>
+</template>
+
+<script>
+	// @ is an alias to /src
+
+	export default {
+		name: 'home',
+		data() {
+			return {
+				id: localStorage.memToken,
+				memId: localStorage.memId,
+				phone: localStorage.phone,
+				cash: '',
+				code: ''
+			}
+		},
+		methods: {
+			getCash() {
+				let data = {
+					xrymem_token_id: localStorage.memToken,
+					opType: 301,
+					code: this.code
+				}
+				this.$api.cash.cash(data).then( res => {
+					if(res.resultCode == 1) {
+						this.cash = Number(res.data.caAcct1 + res.data.caAcct2).toFixed(2)
+					}
+				})
+			},
+			toCash() {
+				this.$router.push({path: '/cash',query: {cash: this.cash}})
+			},
+			out() {
+				localStorage.clear()
+				this.$router.push('/')
+			},
+			//授权
+			accredit() {
+				// let url = window.location.href.split('#')[0]
+				let url = window.location.href
+				this.$api.wx.memberAuthorization({url}).then(res => {
+					if(res.resultCode === 1) {
+						window.location.href = res.data
+					}
+				})
+			},
+		},
+		mounted() {
+			let url = window.location.href
+			if(url.indexOf('?code') > -1) {
+				let search = url.split('?')[1]
+				let code = search.split('&')[0]
+				this.code = code.split('=')[1]
+			}else{
+				this.accredit()
+			}
+			this.getCash()
+		}
+	}
+</script>
+
+<style lang="less" scoped>
+	@s: 0.0133rem;
+	.home{
+		padding-bottom: 90*@s;
+		.head{
+			height: 212*@s;
+			background-image: url('../assets/img/home.png');
+			background-size: 100% 100%;
+			display: flex;
+			align-items: center;
+			padding: 40*@s;
+			color: #fff;
+			box-sizing: border-box;
+			.head-img{
+				width: 120*@s;
+				border-radius: 50%;
+			}
+			.info{
+				font-size: 30*@s;
+				flex: 1;
+				margin-left: 20*@s;
+				line-height: 1;
+				.phone{
+					font-size: 40*@s;
+					margin-top: 15*@s;
+				}
+				.id{
+					margin: 10*@s 0 0 10*@s;
+				}
+			}
+			.enjoy{
+				width: 46*@s;
+			}
+		}
+		.cont{
+			background: #fff;
+			padding: 0 20*@s;
+			.item{
+				border-bottom: 1px solid #F7F7F7;
+				height: 98*@s;
+				display: flex;
+				align-items: center;
+				color: #44444E;
+				span{
+					flex: 1;
+					margin-left: 30*@s;
+					font-size: 30*@s;
+				}
+				.num{
+					color: #88888E;
+					margin-right: 30*@s;
+				}
+				.pw{
+					width: 32*@s;
+				}
+			}
+		}
+		.foot{
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			line-height: 88*@s;
+			background: #f44;
+			text-align: center;
+			color: #fff;
+		}
+	}
+</style>

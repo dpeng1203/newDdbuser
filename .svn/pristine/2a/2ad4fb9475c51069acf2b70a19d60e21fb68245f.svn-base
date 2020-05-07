@@ -1,0 +1,94 @@
+<template>
+    <div class="friend">
+        <h3>已推荐好友列表（共 {{num}} 人）</h3>
+        <div class="title">
+            <p>编号</p>
+            <p>昵称</p>
+        </div>
+        <div class="cont">
+            <p>duanduan</p>
+            <p>2324234</p>
+        </div>
+        <div class="cont">
+            <p>duanduan</p>
+            <p>2324234</p>
+        </div>
+        <div class="cont">
+            <p>duanduan</p>
+            <p>2324234</p>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    data() {
+        return{
+            num: 0,
+            parms: {
+                xrymem_token_id: localStorage.memToken,
+                opType: 311,
+            }
+        }
+    },
+    methods: {
+        getList() {
+            this.$api.ticket.merTicket(this.parms).then(res => {
+                if(res.resultCode == 1) {
+                    let list = res.data
+                    if(list.length != 0) {
+                        this.unusedList = list.filter(ele => {
+                            return ele.c_status == 0
+                        })
+                        
+                        this.usedList = list.filter(ele => {
+                            return ele.c_status == 2
+                        })
+                        this.timedList = list.filter(ele => {
+                            return ele.c_status == 3
+                        })
+                        this.unusedTitle = `未使用 (${this.unusedList.length}张)`
+                        this.usedTitle = `已使用 (${this.usedList.length}张)`
+                        this.timedTitle = `已过期 (${this.timedList.length}张)`
+                    }
+                    
+                }
+            })
+        }
+    },
+    mounted() {
+        this.getList()
+    }    
+}
+</script>
+
+<style lang="less" scoped>
+@s: 0.0133rem;
+.friend{
+    padding: 0 30*@s 30*@s;
+    background: #fff;
+    h3{
+        padding: 10*@s 0;
+    }
+    .title{
+        display: flex;
+        align-items: center;
+        padding: 10*@s 0;
+        p{
+            flex: 1;
+            font-weight: bold;
+            text-align: center;
+        }
+    }
+    .cont{
+        display: flex;
+        align-items: center;
+        padding: 10*@s 0;
+        border-top: 1px solid #eee;
+        p{
+            flex: 1;
+            text-align: center;
+        }
+    }
+}
+</style>

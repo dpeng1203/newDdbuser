@@ -1,0 +1,60 @@
+<template>
+    <div class="qr">
+        <p>我的推荐码</p>
+        <qrcode :url="qrText" :iconurl="imageUrl" :wid="260" :hei="260" :imgwid="53" :imghei="53"></qrcode>
+        <div class="tip">每推荐一人赠送1张体验券</div>
+    </div>
+</template>
+
+<script>
+import qrcode from 'vue_qrcodes'
+export default {
+    components: {
+        qrcode
+    },
+    data () {
+        return {
+            imageUrl: require('../../assets/img/logo.jpg'),
+            qrText: ''
+        }
+    },
+    methods: {
+        getNumber() {
+            let parms = {
+                xrymem_token_id: localStorage.memToken,
+                resKey: 'recommendCoupon',
+                opType: 233
+            }
+            this.$api.cash.getTicketNumber(parms).then(res => {
+
+            })
+            
+        }
+    },
+    created() {
+        this.qrText = 'http://xry.dodohz.com/ddbxryuser/index.html#/?memCode=' + localStorage.memId
+        // this.getNumber()
+            
+    }
+}
+</script>
+
+<style lang="less" scoped>
+@s: 0.0133rem;
+.qr{
+    // height: 100%;
+    text-align: center;
+    background: #fff;
+    margin: 200*@s 40*@s;
+    border-radius: 20*@s;
+    padding-bottom: 30*@s; 
+    p{
+        padding: 30*@s;
+        font-size: 50*@s;
+    }
+    .tip{
+        margin-top: 10*@s;
+        color: #ccc;
+    }
+}
+</style>

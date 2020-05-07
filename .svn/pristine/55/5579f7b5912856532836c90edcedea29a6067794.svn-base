@@ -1,0 +1,15 @@
+import pay from './api_pay'
+import cash from './api_cash'
+import login from './api_login'
+import ticket from './api_ticket'
+
+const api = {
+    pay,
+    cash,
+    login,
+    ticket
+  };
+  
+  export default api;
+
+
