@@ -124,17 +124,17 @@ export default {
         }
       }
     }
+  },
+  created() {
+    if (localStorage.recCode) {
+      Dialog.alert({
+        title: "提示",
+        message: "推荐人ID:" + " " + localStorage.recCode
+      }).then(() => {
+        // on close
+      });
+    }
   }
-  // created() {
-  //   if (localStorage.recCode) {
-  //     Dialog.alert({
-  //       title: "提示",
-  //       message: "推荐人ID:" + " " + localStorage.recCode
-  //     }).then(() => {
-  //       // on close
-  //     });
-  //   }
-  // }
 };
 </script>
 
