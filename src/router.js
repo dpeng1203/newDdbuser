@@ -264,5 +264,13 @@ export default new Router({
         title: '订单支付',
       }
     },
+    {
+      path: '/orderList',
+      name: 'orderList',
+      component: () => import("./views/mall/mallMine/orderList.vue"),
+      meta: {
+        title: '订单支付',
+      }
+    },
   ]
 })

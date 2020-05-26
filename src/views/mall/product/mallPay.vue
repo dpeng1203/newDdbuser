@@ -218,12 +218,7 @@ export default {
         }
         .info {
             flex: 1;
-            // display: inline-block;
             margin-left: 30 * @s;
-            .title {
-                font-size: 24 * @s;
-                // font-weight: bold;
-            }
             .desc {
                 color: #808080;
                 margin-top: 10 * @s;
