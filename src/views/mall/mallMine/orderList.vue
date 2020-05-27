@@ -5,67 +5,145 @@
             <van-tab title="待付款"></van-tab>
             <van-tab title="待发货"></van-tab>
             <van-tab title="待收货"></van-tab>
-            <van-tab title="评价"></van-tab>
-            <van-tab title="退款"></van-tab>
         </van-tabs>
-        <div class="list">
-            <div class="list-title">
-                <span class="name">优选专区</span>
-                <span class="icon"><van-icon name="arrow" color="#666" /></span>
-                <span class="state">带付款</span>
-            </div>
-            <div class="cont" >
-                <img :src="item.pMainPic" alt />
-                <div class="info">
-                    <div class="title">{{item.pName}}</div>
-                    <div class="desc">{{item.desc}}</div>
-                    <div class="pro-price">
-                    <span class="ori-price">￥{{item.pPrice1}}</span>
-                    <span class="price">￥{{item.pPrice3}}</span>
-                    <span class="num">x 1</span>
+        <van-list
+            v-model="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="onLoad"
+            >
+            <div class="list" v-for="item in list" :key="item.pbCode">
+                <div class="list-title">
+                    <span class="name">优选专区</span>
+                    <span class="icon"><van-icon name="arrow" color="#666" /></span>
+                    <span class="state" v-if="item.status === 99">待付款</span>
+                    <span class="state" v-if="item.status === 0">待发货</span>
+                    <span class="state" v-if="item.status === 1">待收货</span>
+                    <span class="state" v-if="item.status === 2">已签收</span>
+                </div>
+                <div class="cont" >
+                    <img :src="item.pMainPic" alt />
+                    <div class="info">
+                        <div class="title">{{item.pName}}</div>
+                        <div class="desc">{{item.desc}}</div>
+                        <div class="pro-price">
+                        <span class="ori-price">￥{{item.pPrice2}}</span>
+                        <span class="price">￥{{item.pPrice3}}</span>
+                        <span class="num">x 1</span>
+                        </div>
                     </div>
                 </div>
+                <div class="wrapper">
+                    共1件商品&nbsp;&nbsp;合计：<span>￥ {{item.pPrice3}}</span> (含运费￥0.00)
+                </div>
+                <div class="foot" @click="toDetail(item.pbCode,item.status)">
+                    <div class="btn" v-if="item.status === 99">去付款</div>
+                    <div class="btn" v-if="item.status === 0 || item.status === 1">查看详情</div>
+                    <div class="btn" v-if="item.status === 2">查看详情</div>
+                    <!-- <div class="btn" v-if="item.status === 1">去付款</div> -->
+                </div>
             </div>
-            <div class="wrapper">
-                共1件商品&nbsp;&nbsp;合计：<span>￥ 180.00</span> (含运费￥0.00)
-            </div>
-            <div class="foot">
-                <div class="btn">去付款</div>
-            </div>
-        </div>
-        
+        </van-list>
     </div>
 </template>
 
 <script>
-import { Tab, Tabs, Icon } from 'vant';
+import { Tab, Tabs, Icon, List } from 'vant';
 export default {
     components: {
         [Tab.name]: Tab,
         [Tabs.name]: Tabs,
-        [Icon.name]: Icon
+        [Icon.name]: Icon,
+        [List.name]: List
     },
     data() {
         return{
-            active: 1,
+            loading: false,
+            finished: false,
+            active: 0,
             oStatus: 0,
             item: {
 
-            }
+            },
+            parms: {
+                pageNum: 0,
+                pageSize: 10,
+                opType: 405,
+                prdStatus: -1,
+                xrymem_token_id: localStorage.memToken
+            },
+            list: []
         }
     },
     methods: {
         handChange(name,title) {
-            // console.log(name,title)
             if(name === 0) {
-                this.oStatus = -1
+                this.parms.prdStatus = -1
+                this.parms.pageNum = 1
+                this.finished = false
+                this.list = []
             }else if(name === 1) {
-                this.oStatus = -2
-            }else{
-                this.oStatus = Number(name) - 2
+                this.parms.prdStatus = 99
+                this.parms.pageNum = 1
+                this.finished = false
+                this.list = []
+            }else if(name === 2) {
+                this.parms.prdStatus = 0
+                this.parms.pageNum = 1
+                this.finished = false
+                this.list = []
+            }else if(name === 3) {
+                this.parms.prdStatus = 1
+                this.parms.pageNum = 1
+                this.finished = false
+                this.list = []
             }
-            // this.getMyOrder()
         },
+        onLoad() {
+            setTimeout(() => {
+                this.parms.pageNum ++
+                this.getList()
+            }, 1000);
+        },
+        getList() {
+            this.$api.mall.order(this.parms).then( res => {
+                console.log(222)
+                // 加载状态结束
+                this.loading = false;
+                if (res.resultCode === 1) {
+                    // if(res.data.data.length != 0) {
+                        res.data.data.forEach(ele => {
+                            let pCode = ele.pCode
+                            this.$api.mall.homeDesc({ pCode }).then(res => {
+                                if (res.resultCode === 1) {
+                                    this.$set(ele,'pName',res.data.pName)
+                                    this.$set(ele,'pPrice2',res.data.pPrice2)
+                                    this.$set(ele,'pPrice3',res.data.pPrice3)
+                                    this.$set(ele,'pMainPic',res.data.pMainPic)
+                                    this.$set(ele,'desc',JSON.parse(res.data.pDesc)[0].desc)
+                                }
+                            });
+                        })
+                    // }
+                    if(this.parms.pageNum == 1) {
+                        this.list = res.data.data
+                    }else{
+                        this.list = [...this.list,...res.data.data]
+                    }
+                    console.log(this.list)
+                    // 数据全部加载完成
+                    if (this.list.length >= res.data.total) {
+                        this.finished = true;
+                    }
+                }
+            })
+        },
+        toDetail(pbCode,status) {
+            this.$router.push({path: '/orderDetail',query: {pbCode,status}})
+        },
+    },
+    mounted() {
+        // this.getList()
     }
 }
 </script>
