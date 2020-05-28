@@ -29,4 +29,7 @@ export default {
      // 支付订单
      orderPay: p => $.get('/zqxry/payPbBill', p),
 
+     //物流
+     log: p => $.get('/zqxry/bizqry', p),
+
 }
