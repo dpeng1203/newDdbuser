@@ -41,7 +41,7 @@
                 <div class="value">总价：<span>￥{{item.pPrice3}}</span></div>
             </div>
         </div>
-        <div class="foot" v-if="status == 99">
+        <div class="foot" v-if="status == 0">
             <van-submit-bar
                 :price="item.pPrice3*100"
                 button-text="支付"

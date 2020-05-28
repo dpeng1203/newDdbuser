@@ -16,10 +16,10 @@
                 <div class="list-title">
                     <span class="name">优选专区</span>
                     <span class="icon"><van-icon name="arrow" color="#666" /></span>
-                    <span class="state" v-if="item.status === 99">待付款</span>
-                    <span class="state" v-if="item.status === 0">待发货</span>
-                    <span class="state" v-if="item.status === 1">待收货</span>
-                    <span class="state" v-if="item.status === 2">已签收</span>
+                    <span class="state" v-if="item.status === 0 || item.status === 3">待付款</span>
+                    <span class="state" v-if="item.status === 2 && item.pbType === 0">待发货</span>
+                    <span class="state" v-if="item.status === 2 && item.pbType === 1">待收货</span>
+                    <span class="state" v-if="item.status === 2 && item.pbType === 2">已签收</span>
                 </div>
                 <div class="cont" >
                     <img :src="item.pMainPic" alt />
@@ -37,8 +37,8 @@
                     共1件商品&nbsp;&nbsp;合计：<span>￥ {{item.pPrice3}}</span> (含运费￥0.00)
                 </div>
                 <div class="foot" @click="toDetail(item.pbCode,item.status)">
-                    <div class="btn" v-if="item.status === 99">去付款</div>
-                    <div class="btn" v-if="item.status === 0 || item.status === 1">查看详情</div>
+                    <div class="btn" v-if="item.status === 0 || item.status === 3">去付款</div>
+                    <div class="btn" v-if="item.status === 2 && item.pbType !== 0">查看物流</div>
                     <div class="btn" v-if="item.status === 2">查看详情</div>
                     <!-- <div class="btn" v-if="item.status === 1">去付款</div> -->
                 </div>
