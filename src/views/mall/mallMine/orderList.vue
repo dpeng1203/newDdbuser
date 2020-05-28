@@ -113,7 +113,9 @@ export default {
                 if (res.resultCode === 1) {
                     if(res.data.data.length != 0) {
                         res.data.data.forEach(ele => {
-                            ele.desc = JSON.parse(ele.productInfo.pDesc)[0].desc
+                            if(ele.productInfo.pDesc) {
+                                ele.desc = JSON.parse(ele.productInfo.pDesc)[0].desc
+                            }
                             ele.tatol = (ele.price * ele.pCount).toFixed(2)
                         })
                     }

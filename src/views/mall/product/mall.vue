@@ -12,7 +12,7 @@
       </van-swipe-item>
     </van-swipe>
     <div class="img-title">
-      <img src="../../../assets/img/mall_list_title.png" alt="">
+      <img src="../../../assets/img/ddzx.png" alt="">
     </div>
     <div class="list">
       <div class="item" v-for="item in list" :key="item.pCode" >
@@ -34,7 +34,7 @@
     </div>
     <!-- 多多甄选 -->
     <div class="img-title" style="marginTop: .133rem" v-if="list2.length!==0">
-      <img src="../../../assets/img/ddzx.png" alt="">
+      <img src="../../../assets/img/mall_list_title.png" alt="">
     </div>
     <div class="list">
       <div class="item" v-for="item in list2" :key="item.pCode" >
@@ -83,15 +83,15 @@ export default {
           
         if (res.resultCode === 1) {
           res.data.data.forEach(ele => {
-            ele.desc = JSON.parse(ele.pDesc)[0].desc;
+            if(ele.pDesc) {
+              ele.desc = JSON.parse(ele.pDesc)[0].desc;
+            }
           });
           this.list = res.data.data.filter(ele => {
-            // return ele.pType === 0
-            return ele.pName.indexOf('全面套餐') == -1
+            return ele.pType === 0
           });
           this.list2 = res.data.data.filter(ele => {
-            // return ele.pType === 1
-            return ele.pName.indexOf('全面套餐') > -1
+            return ele.pType === 1
           });
         }
       });

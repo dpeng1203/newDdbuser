@@ -26,7 +26,7 @@
             </div>
             <div class="item">
                 <div class="name">商品价格</div>
-                <div class="value" >￥{{item.pPrice2*pCount}}</div>
+                <div class="value" >￥{{(item.pPrice2*pCount).toFixed(2)}}</div>
             </div>
             <div class="item">
                 <div class="name">优惠金额</div>
@@ -38,7 +38,7 @@
             </div>
             <div class="item total">
                 <div class="name"></div>
-                <div class="value">总价：<span>￥{{item.pPrice3*pCount}}</span></div>
+                <div class="value">总价：<span>￥{{(item.pPrice3*pCount).toFixed(2)}}</span></div>
             </div>
         </div>
         <div class="foot" v-if="status == 0">
@@ -103,7 +103,9 @@ export default {
             this.$api.mall.homeDesc({ pCode }).then(res => {
                 if (res.resultCode === 1) {
                     this.item = res.data
-                    this.item.desc = JSON.parse(res.data.pDesc)[0].desc;
+                    if(res.data.pDesc) {
+                        this.item.desc = JSON.parse(res.data.pDesc)[0].desc;
+                    }
                     this.item.f_price = ((this.item.pPrice2-this.item.pPrice3)*this.pCount).toFixed(2)
                 }
             });

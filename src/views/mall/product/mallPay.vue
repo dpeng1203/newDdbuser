@@ -16,7 +16,7 @@
         </div>
         <!-- <div class="line"><img src="../../../assets/img/line.png" alt=""></div> -->
         <div class="product" >
-          <img :src="item.pMainPic" alt />
+          <img :src="pMainPic" alt />
           <div class="info">
             <div class="title">{{pName}}</div>
             <div class="desc">{{desc}}</div>
@@ -82,7 +82,6 @@ export default {
                 daCode: '',
                 daMobile: ''
             },
-            item: {},
             pName: '',
             pMainPic: '',
             pPrice2: 0,
@@ -159,7 +158,9 @@ export default {
                     this.allTotal = res.data.pPrice2
                     this.pPrice3 = res.data.pPrice3
                     this.total = res.data.pPrice3
-                    this.desc = JSON.parse(res.data.pDesc)[0].desc;
+                    if(res.data.pDesc) {
+                        this.desc = JSON.parse(res.data.pDesc)[0].desc;
+                    }
                     this.f_price = (this.pPrice2-this.pPrice3).toFixed(2)
                 }
             });

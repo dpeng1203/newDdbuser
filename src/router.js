@@ -206,7 +206,7 @@ export default new Router({
         component: () => import("./views/mall/product/mall.vue"),
         meta: {
           title: '产品列表',
-          // keepAlive: true
+          keepAlive: true
         }
       },
 
@@ -216,7 +216,7 @@ export default new Router({
         component: () => import("./views/mall/class/class.vue"),
         meta: {
           title: '全部分类',
-          // keepAlive: true
+          keepAlive: true
         }
       },
       {
@@ -225,7 +225,7 @@ export default new Router({
         component: () => import("./views/mall/car/car.vue"),
         meta: {
           title: '购物车',
-          // keepAlive: true
+          keepAlive: true
         }
       },
       {
@@ -234,7 +234,7 @@ export default new Router({
         component: () => import("./views/mall/mallMine/mallMine.vue"),
         meta: {
           title: '我的',
-          // keepAlive: true
+          keepAlive: true
         }
       }
       ]
@@ -278,6 +278,14 @@ export default new Router({
       component: () => import("./views/mall/mallMine/orderDetail.vue"),
       meta: {
         title: '订单详情',
+      }
+    },
+    {
+      path: '/rule',
+      name: 'rule',
+      component: () => import("./views/mall/mallMine/rule.vue"),
+      meta: {
+        title: '相关政策',
       }
     },
   ]
