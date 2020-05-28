@@ -86,10 +86,12 @@ export default {
             ele.desc = JSON.parse(ele.pDesc)[0].desc;
           });
           this.list = res.data.data.filter(ele => {
-            return ele.pType === 0
+            // return ele.pType === 0
+            return ele.pName.indexOf('全面套餐') == -1
           });
           this.list2 = res.data.data.filter(ele => {
-            return ele.pType === 1
+            // return ele.pType === 1
+            return ele.pName.indexOf('全面套餐') > -1
           });
         }
       });

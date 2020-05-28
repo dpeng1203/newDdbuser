@@ -18,12 +18,12 @@
         <div class="product" >
           <img :src="item.pMainPic" alt />
           <div class="info">
-            <div class="title">{{item.pName}}</div>
-            <div class="desc">{{item.desc}}</div>
+            <div class="title">{{pName}}</div>
+            <div class="desc">{{desc}}</div>
             <div class="pro-price">
-              <span class="ori-price">￥{{item.pPrice1}}</span>
-              <span class="price">￥{{item.pPrice3}}</span>
-              <span class="num">x 1</span>
+              <span class="ori-price">￥{{pPrice2}}</span>
+              <span class="price">￥{{pPrice3}}</span>
+              <span class="num"><van-stepper v-model="num" /></span>
             </div>
           </div>
         </div>
@@ -33,11 +33,11 @@
             </div>
             <div class="item">
                 <div class="name">商品价格</div>
-                <div class="value" >￥{{item.pPrice2}}</div>
+                <div class="value" >￥{{allTotal}}</div>
             </div>
             <div class="item">
                 <div class="name">优惠金额</div>
-                <div class="value" >- ￥{{item.f_price}}</div>
+                <div class="value" >- ￥{{f_price}}</div>
             </div>
             <div class="item">
                 <div class="name">运费</div>
@@ -45,11 +45,11 @@
             </div>
             <div class="item total">
                 <div class="name"></div>
-                <div class="value">总价：<span>￥{{item.pPrice3}}</span></div>
+                <div class="value">总价：<span>￥{{total}}</span></div>
             </div>
         </div>
         <van-submit-bar
-            :price="item.pPrice3*100"
+            :price="total*100"
             button-text="提交订单"
             @submit="onSubmit"
         />
@@ -59,17 +59,19 @@
 </template>
 
 <script>
-import { SubmitBar,Icon, Toast } from 'vant';
+import { SubmitBar,Icon, Toast,Stepper  } from 'vant';
 import areaList from '../../../components/areaList'
 export default {
     name: 'order',
     components: {
         [SubmitBar.name]: SubmitBar,
         [Icon.name]: Icon,
-        areaList
+        areaList,
+        [Stepper.name]: Stepper
     },
     data() {
         return{
+            num: 1,
             showAreaList: false,
             pCode: '',
             podRemark: '',              //卖家留言
@@ -80,8 +82,24 @@ export default {
                 daCode: '',
                 daMobile: ''
             },
-            item: {}
+            item: {},
+            pName: '',
+            pMainPic: '',
+            pPrice2: 0,
+            pPrice3: 0,
+            desc: '',
+            f_price: 0,   //  优惠金额
+            allTotal: 0,
+            total: 0,
         }
+    },
+    watch: {
+        num(val) {
+            this.allTotal = (this.pPrice2*val).toFixed(2)
+            this.total = (this.pPrice3*val).toFixed(2)
+            this.f_price = (this.allTotal-this.total).toFixed(2)
+        }
+
     },
     methods: {
         close(item) {
@@ -96,7 +114,7 @@ export default {
             let parms = {
                 opType: 404,
                 pCode: this.pCode,
-                pCount: 1,
+                pCount: this.num,
                 daCode: this.addrInfo.daCode,
                 xrymem_token_id: localStorage.memToken
             };
@@ -135,9 +153,14 @@ export default {
         getDesc(pCode) {
             this.$api.mall.homeDesc({ pCode }).then(res => {
                 if (res.resultCode === 1) {
-                    this.item = res.data
-                    this.item.desc = JSON.parse(res.data.pDesc)[0].desc;
-                    this.item.f_price = (this.item.pPrice2-this.item.pPrice3).toFixed(2)
+                    this.pName = res.data.pName
+                    this.pMainPic = res.data.pMainPic
+                    this.pPrice2 = res.data.pPrice2
+                    this.allTotal = res.data.pPrice2
+                    this.pPrice3 = res.data.pPrice3
+                    this.total = res.data.pPrice3
+                    this.desc = JSON.parse(res.data.pDesc)[0].desc;
+                    this.f_price = (this.pPrice2-this.pPrice3).toFixed(2)
                 }
             });
         },

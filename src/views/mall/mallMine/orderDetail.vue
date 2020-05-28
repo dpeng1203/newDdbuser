@@ -16,7 +16,7 @@
                 <div class="pro-price">
                 <span class="ori-price">￥{{item.pPrice2}}</span>
                 <span class="price">￥{{item.pPrice3}}</span>
-                <span class="num">x 1</span>
+                <span class="num">x {{pCount}}</span>
                 </div>
             </div>
         </div>
@@ -26,7 +26,7 @@
             </div>
             <div class="item">
                 <div class="name">商品价格</div>
-                <div class="value" >￥{{item.pPrice2}}</div>
+                <div class="value" >￥{{item.pPrice2*pCount}}</div>
             </div>
             <div class="item">
                 <div class="name">优惠金额</div>
@@ -38,12 +38,12 @@
             </div>
             <div class="item total">
                 <div class="name"></div>
-                <div class="value">总价：<span>￥{{item.pPrice3}}</span></div>
+                <div class="value">总价：<span>￥{{item.pPrice3*pCount}}</span></div>
             </div>
         </div>
         <div class="foot" v-if="status == 0">
             <van-submit-bar
-                :price="item.pPrice3*100"
+                :price="item.pPrice3*pCount*100"
                 button-text="支付"
                 @submit="onSubmit"
             />
@@ -65,6 +65,8 @@ export default {
             daName: '',
             daMobile: '',
             aAddress: '',
+            pCount: '',
+            price: '',
             item: {}
         }
     },
@@ -91,6 +93,8 @@ export default {
                     this.daName = res.data.daName
                     this.daMobile = res.data.daMobile
                     this.aAddress = res.data.aAddress
+                    this.pCount = res.data.pCount
+                    this.price = res.data.price
                     this.getProDetail(res.data.pCode)
                 }
             })
@@ -100,7 +104,7 @@ export default {
                 if (res.resultCode === 1) {
                     this.item = res.data
                     this.item.desc = JSON.parse(res.data.pDesc)[0].desc;
-                    this.item.f_price = (this.item.pPrice2-this.item.pPrice3).toFixed(2)
+                    this.item.f_price = ((this.item.pPrice2-this.item.pPrice3)*this.pCount).toFixed(2)
                 }
             });
         }
