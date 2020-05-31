@@ -17,7 +17,7 @@
     <!-- <div class="btn" @click="toPay">购 买</div> -->
     <van-goods-action>
       <van-goods-action-icon icon="wap-home-o" text="主页" @click="$router.push('/mall')"/>
-      <van-goods-action-icon icon="cart-o" text="购物车"  />
+      <van-goods-action-icon icon="cart-o" text="购物车"  @click="$router.push('/car')"/>
       <van-goods-action-button type="warning" text="加入购物车" @click="joinCar"/>
       <van-goods-action-button type="danger" text="立即购买" @click="toPay"/>
     </van-goods-action>
@@ -69,22 +69,32 @@ export default {
     },
     joinCar() {
       let car = [], carList = []
-      if(localStorage.car) {
+      if(localStorage.car&&localStorage.car.length!=0) {
         car = JSON.parse(localStorage.car)
-        if(car.includes(this.pCode)) {
-          JSON.parse(localStorage.carList).forEach(ele => {
+        if(car.indexOf(Number(this.pCode)) > -1) {
+          let carList = JSON.parse(localStorage.carList)
+          console.log(carList)
+          carList.forEach(ele => {
             if(ele.pCode == this.pCode) {
               ele.pCount ++
             }
           })
+          localStorage.carList = JSON.stringify(carList)
+        }else{
+          car = JSON.parse(localStorage.car)
+          car.push(Number(this.pCode))
+          carList = JSON.parse(localStorage.carList)
+          carList.push({pCode: this.pCode,pCount: 1,pName: this.pName,pPrice2: this.pPrice2,pPrice3:this.pPrice3,pMainPic: this.pMainPic})
+           localStorage.car = JSON.stringify(car)
+          localStorage.carList = JSON.stringify(carList)
         }
       }else{
-        car.push(this.pCode)
-        carList.push({pCode: 1,pName: this.pName,pPrice2: this.pPrice2,pPrice3:this.pPrice3,pMainPic: this.pMainPic})
+        car.push(Number(this.pCode))
+        carList.push({pCode: this.pCode,pCount: 1,pName: this.pName,pPrice2: this.pPrice2,pPrice3:this.pPrice3,pMainPic: this.pMainPic})
         localStorage.car = JSON.stringify(car)
         localStorage.carList = JSON.stringify(carList)
       }
-      
+      Toast('加入购物车成功！')
     }
   },
   mounted() {
