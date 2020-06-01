@@ -4,7 +4,7 @@
       <div class="wrap">
         <van-circle
           v-model="currentRate"
-          color="#20a1af"
+          color="#00b616"
           size="4rem"
           layer-color="#E7F7FF"
           fill="#fff"
@@ -152,7 +152,7 @@ export default {
     api.pay.getOrderInfo({ orderId }).then(res => {
       // alert(res)resultCode
       if (res.resultCode == 1) {
-        if (res.data.length !== 0 && (res.data[0]).oPayBizType == 0) {
+        if (res.data.length !== 0) {
           next();
         } else {
           Toast.success("成功！");
@@ -257,7 +257,7 @@ export default {
     height: 550 * @s;
     text-align: center;
     padding-top: 56 * @s;
-    background: #8cdbe3;
+    background: #00b616;
     box-sizing: border-box;
     position: relative;
     .wrap {
@@ -290,7 +290,7 @@ export default {
     }
     .using-top-tip {
       margin-top: 36 * @s;
-      color: #e6f7ff;
+      color: #fff;
       font-size: 30 * @s;
       line-height: 1;
     }
