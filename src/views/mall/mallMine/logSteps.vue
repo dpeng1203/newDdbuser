@@ -55,7 +55,7 @@ export default {
     methods: {
         getLog() {
             let parms = {
-                opType: 237,
+                opType: 408,
                 pbCode: this.pbCode,
                 xrymem_token_id: localStorage.memToken
             }

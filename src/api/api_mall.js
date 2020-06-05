@@ -30,6 +30,6 @@ export default {
      orderPay: p => $.get('/zqxry/payPbBill', p),
 
      //物流
-     log: p => $.get('/zqxry/bizqry/service', p),
+     log: p => $.get('/zqxry/shopping/service', p),
 
 }
