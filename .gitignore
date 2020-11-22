@@ -2,7 +2,9 @@
 node_modules
 /dist
 ddbxryuser
+/ddbxryuser
 htdocs
+/htdocs
 # local env files
 .env.local
 .env.*.local
