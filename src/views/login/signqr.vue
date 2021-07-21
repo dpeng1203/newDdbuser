@@ -2,22 +2,50 @@
   <div class="sign">
     <div class="title">
       推荐注册
-      <p v-if="recCode">(推荐人ID：{{recCode}})</p>
+      <p v-if="recCode">(推荐人ID：{{ recCode }})</p>
       <p v-else class="title-tip">(推荐人不存在)</p>
     </div>
     <div class="login-cont">
       <div class="input">
         <input type="text" placeholder="用户名：4-14字符" v-model="name" />
-        <input type="password" placeholder="登录密码：6-20字符" v-model="password" />
-        <input type="number" pattern="[0-9]*" placeholder="手机号" v-model="phone" />
-        <input type="number" pattern="[0-9]*" placeholder="输入验证码" v-model="code" />
-        <span v-show="!timeObj.canGet">{{timeObj.waitTime+"s后重新获取"}}</span>
-        <span @click="getCode" v-show="timeObj.canGet" class="code">获取验证码</span>
-        <input type="password" pattern="[0-9]*" placeholder="支付密码：6位数字" v-model="memPayPwd" />
+        <input
+          type="password"
+          placeholder="登录密码：6-20字符"
+          v-model="password"
+        />
+        <input
+          type="number"
+          pattern="[0-9]*"
+          placeholder="手机号"
+          v-model="phone"
+        />
+        <input
+          type="number"
+          pattern="[0-9]*"
+          placeholder="输入验证码"
+          v-model="code"
+        />
+        <span v-show="!timeObj.canGet">{{
+          timeObj.waitTime + "s后重新获取"
+        }}</span>
+        <span @click="getCode" v-show="timeObj.canGet" class="code"
+          >获取验证码</span
+        >
+        <input
+          type="password"
+          pattern="[0-9]*"
+          placeholder="支付密码：6位数字"
+          v-model="memPayPwd"
+        />
       </div>
       <div class="btn" @click="toSign">立即注册</div>
     </div>
-    <van-popup v-model="show" :style="{ width: '80%' }" round :close-on-click-overlay="false"></van-popup>
+    <van-popup
+      v-model="show"
+      :style="{ width: '80%' }"
+      round
+      :close-on-click-overlay="false"
+    ></van-popup>
     <div class="p-icon" v-if="show">
       <img src="../../assets/img/gzh.jpg" alt class="gzh" />
       <div class="icon-close" @click="show = false">
@@ -43,7 +71,7 @@ export default {
     [Icon.name]: Icon,
     [Popup.name]: Popup
   },
-  data() {
+  data () {
     return {
       show: false,
       name: "",
@@ -61,7 +89,7 @@ export default {
     };
   },
   computed: {
-    timeObj() {
+    timeObj () {
       //最终对象
       if (!this.timeCountObj.canGet) {
         return timeCountdown(this.timeCountObj);
@@ -71,7 +99,7 @@ export default {
     }
   },
   methods: {
-    getCode() {
+    getCode () {
       if (checkPhone(this.phone)) {
         let data = {
           mobile: this.phone,
@@ -86,7 +114,7 @@ export default {
         });
       }
     },
-    toSign() {
+    toSign () {
       if (
         checkUserName(this.name) &&
         checkPassWord(this.password) &&
@@ -114,7 +142,7 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     if (this.$route.query.memCode) {
       this.recCode = this.$route.query.memCode;
     } else {
@@ -170,8 +198,8 @@ export default {
         border-radius: 20 * @s;
       }
       .code {
-        color: #81cf9b;
-        border: 1px solid #81cf9b;
+        color: #7eb4da;
+        border: 1px solid #7eb4da;
       }
     }
     .btn {
@@ -181,7 +209,7 @@ export default {
       width: 220 * @s;
       line-height: 60 * @s;
       border-radius: 47 * @s;
-      background: #81cf9b;
+      background: #7eb4da;
       color: #fff;
     }
   }
