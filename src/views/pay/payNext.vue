@@ -12,14 +12,14 @@
         <div ref="bgChoose1" class="xry" @click="payType(1)">
             <p class="xry_title"> SN：{{list.macCode}}</p>
             <van-divider />
-            <p class="payTitle">{{at}}号养生议(15分钟)</p> 
+            <p class="payTitle">{{at}}号养生仪(15分钟)</p> 
             <span id="mainSpan" >{{list.macPrice}}元</span>
            
         </div>
         <div ref="bgChoose2" class="xry"   @click="payType(2)" v-if="list.price1 && time(list.serviceTime1)">
             <p class="xry_title"> SN：{{list.macCode}}</p>
              <van-divider />
-           <p class="payTitle">{{at}}号养生议</p>
+           <p class="payTitle">{{at}}号养生仪</p>
            <p class="payTime">{{time(list.serviceTime1)}}分钟理疗时间</p> 
            <span>{{list.price1}}元</span> 
 
@@ -27,7 +27,7 @@
         <div ref="bgChoose3" class="xry" @click="payType(3)" v-if="list.price2 && time(list.serviceTime2)">
             <p class="xry_title"> SN：{{list.macCode}}</p>
              <van-divider />
-            <p class="payTitle">{{at}}号养生议</p>
+            <p class="payTitle">{{at}}号养生仪</p>
             <p class="payTime">{{time(list.serviceTime2)}}分钟理疗时间</p>  
             <span>{{list.price2}}元</span>
             
